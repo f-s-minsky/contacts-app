@@ -1,6 +1,7 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -57,8 +58,23 @@ router.post(
       // Save new user in DB
       await user.save();
 
-      // For testing
-      res.json('User saved');
+      // Payload for jwt token
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      // JWT Token creation
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: 3600000 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
     } catch (err) {
       console.error(err.message);
       res.status(500).json('Server Error');
