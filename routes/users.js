@@ -1,11 +1,11 @@
 import express from 'express';
-import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-const router = express.Router();
+import { body, validationResult } from 'express-validator';
 
 import User from '../models/User.js';
+
+const router = express.Router();
 
 // router.route('/').get()
 

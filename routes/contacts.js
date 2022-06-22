@@ -1,4 +1,10 @@
 import express from 'express';
+import auth from '../middleware/auth.js';
+import { body, validationResult } from 'express-validator';
+
+import User from '../models/User.js';
+import Contact from '../models/Contact.js';
+
 const router = express.Router();
 
 // router.route('/').get()
@@ -6,8 +12,16 @@ const router = express.Router();
 // @route   GET api/contacts
 // @desc    Get all user contacts
 // @access  Private
-router.get('/', (req, res) => {
-  res.json({ msg: 'Get all contacts user' });
+router.get('/', auth, async (req, res) => {
+  try {
+    const contacts = await Contact.find({
+      user: req.user.id,
+    }).sort({ date: -1 });
+    res.json(contacts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json('Server Error');
+  }
 });
 
 // @route   POST api/contacts
