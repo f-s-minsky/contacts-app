@@ -3,6 +3,8 @@ const router = express.Router();
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import auth from '../middleware/auth.js';
+
 import User from '../models/User.js';
 
 // router.route('/').get()
@@ -10,8 +12,16 @@ import User from '../models/User.js';
 // @route   GET api/auth
 // @desc    Get logged in user
 // @access  Private
-router.get('/', (req, res) => {
-  res.json({ msg: 'Get logged in user' });
+router.get('/', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select(
+      '-password'
+    );
+    res.json(user);
+  } catch (err) {
+    console.errot(err.message);
+    res.status(500).json('Server Error');
+  }
 });
 
 // @route   POST api/auth
