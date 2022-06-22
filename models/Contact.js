@@ -15,10 +15,10 @@ const ContactSchema = mongoose.Schema({
   },
   phone: {
     type: String,
-    default: 'personnel',
   },
   type: {
     type: String,
+    default: 'personnel',
   },
   date: {
     type: Date,

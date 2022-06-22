@@ -30,7 +30,7 @@ router.post(
         .status(400)
         .json({ errors: errors.array() });
     }
-    // res after validation ok
+    // pull out data from req body
     const { name, email, password } = req.body;
 
     // test if user already exist
