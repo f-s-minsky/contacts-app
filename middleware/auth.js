@@ -12,14 +12,14 @@ const auth = (req, res, next) => {
   }
 
   try {
-    // Pull out the payload
+    // Pull out the payload object
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET
     );
-    console.log(decoded);
+    // console.log(decoded);
 
-    // Set the user payload in req user
+    // Set the user id in req user
     req.user = decoded.user;
     next();
   } catch (err) {
