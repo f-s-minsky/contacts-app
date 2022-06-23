@@ -1,4 +1,22 @@
-node_modules
-.DS_Store
+node_modules/
+# /config/production.json
+# /config/default.json
+# FG
 config/config.env
-.vscode
+
+/client/build
+
+.DS_Store
+# FG
+.vscode 
+
+/client/.env.local
+/client/.env.development.local
+/client/.env.test.local
+/client/.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
