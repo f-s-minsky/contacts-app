@@ -41,6 +41,26 @@ const contactReducer = (state, action) => {
         ...state,
         current: null,
       };
+    case FILTER_CONTACTS:
+      return {
+        ...state,
+        filtered: state.contacts.filter((contact) => {
+          // gi = global & insensitive
+          const regex = new RegExp(`${action.payload}`, 'gi');
+          return contact.name.match(regex) || contact.email.match(regex);
+        }),
+
+        // ...state,
+        // filtered: state.contacts.filter(({ name, email }) => {
+        //   const testString = `${name}${email}`.toLowerCase();
+        //   return testString.includes(action.payload.toLowerCase());
+        // }),
+      };
+    case CLEAR_FILTER:
+      return {
+        ...state,
+        filtered: null,
+      };
     default:
       return state;
   }
