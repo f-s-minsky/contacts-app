@@ -7,8 +7,6 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
-// router.route('/').get()
-
 // @route   POST api/users
 // @desc    Register a user
 // @access  Public
@@ -26,9 +24,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
     // pull out data from req body
     const { name, email, password } = req.body;
@@ -38,9 +34,7 @@ router.post(
       let user = await User.findOne({ email: email });
 
       if (user) {
-        return res
-          .status(400)
-          .json({ msg: 'User already exists' });
+        return res.status(400).json({ msg: 'User already exists' });
       }
 
       // Create new user but not save
@@ -72,6 +66,7 @@ router.post(
         { expiresIn: 3600000 },
         (err, token) => {
           if (err) throw err;
+          // Response with the Token
           res.json({ token });
         }
       );
