@@ -62,7 +62,7 @@ const contactReducer = (state, action) => {
         filtered: null,
       };
     default:
-      return state;
+      throw new Error(`Unsupported type of: ${action.type}`);
   }
 };
 

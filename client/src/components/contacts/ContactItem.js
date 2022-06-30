@@ -1,17 +1,36 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import ContactContext from '../../context/contact/contactContext';
+// import ContactContext from '../../context/contact/contactContext';
+import {
+  useContacts,
+  deleteContact,
+  setCurrent,
+  clearCurrent,
+} from '../../context/contact/ContactState';
 
 const ContactItem = ({ contact }) => {
-  const contactContext = useContext(ContactContext);
-  const { deleteContact, setCurrent, clearCurrent } =
-    contactContext;
+  // const contactContext = useContext(ContactContext);
+  // const { deleteContact, setCurrent, clearCurrent } =
+  //   contactContext;
 
-  const { id, name, email, phone, type } = contact;
+  // NEW
+  // we just need the contact dispatch without state.
+  const contactDispatch = useContacts()[1];
 
+  // const { id, name, email, phone, type } = contact;
+
+  // NEW
+  const { _id, name, email, phone, type } = contact;
+
+  // const onDelete = () => {
+  //   deleteContact(id);
+  //   clearCurrent();
+  // };
+
+  // New
   const onDelete = () => {
-    deleteContact(id);
-    clearCurrent();
+    deleteContact(contactDispatch, _id);
+    clearCurrent(contactDispatch);
   };
 
   return (
@@ -22,9 +41,7 @@ const ContactItem = ({ contact }) => {
           style={{ float: 'right' }}
           className={
             'badge ' +
-            (type === 'professional'
-              ? 'badge-success'
-              : 'badge-primary')
+            (type === 'professional' ? 'badge-success' : 'badge-primary')
           }
         >
           {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -47,16 +64,18 @@ const ContactItem = ({ contact }) => {
         )}
       </ul>
       <p>
-        <button
+        {/* <button
           className='btn btn-dark btn-sm'
           onClick={() => setCurrent(contact)}
+        > */}
+        {/* New */}
+        <button
+          className='btn btn-dark btn-sm'
+          onClick={() => setCurrent(contactDispatch, contact)}
         >
           Edit
         </button>
-        <button
-          className='btn btn-danger btn-sm'
-          onClick={onDelete}
-        >
+        <button className='btn btn-danger btn-sm' onClick={onDelete}>
           Delete
         </button>
       </p>

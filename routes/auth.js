@@ -14,12 +14,10 @@ import User from '../models/User.js';
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select(
-      '-password'
-    );
+    const user = await User.findById(req.user.id).select('-password');
     res.json(user);
   } catch (err) {
-    console.errot(err.message);
+    console.error(err.message);
     res.status(500).json('Server Error');
   }
 });
@@ -36,9 +34,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     const { email, password } = req.body;
@@ -48,21 +44,14 @@ router.post(
 
       // User existence testing
       if (!user) {
-        return res
-          .status(400)
-          .json({ msg: 'Invalide Credentials' });
+        return res.status(400).json({ msg: 'Invalide Credentials' });
       }
 
       // Password testing
-      const isMatch = bcrypt.compare(
-        password,
-        user.password
-      );
+      const isMatch = bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ msg: 'Invalid Credentials' });
+        return res.status(400).json({ msg: 'Invalid Credentials' });
       }
 
       // Token creation and response

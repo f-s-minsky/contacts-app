@@ -11,21 +11,32 @@ import {
 
 const authReducer = (state, action) => {
   switch (action.type) {
+    case USER_LOADED:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        // action.payload = user data
+        user: action.payload,
+      };
     case REGISTER_SUCCESS:
+      // Put the token that we get back into localStorage
       localStorage.setItem('token', action.payload.token);
       return {
         ...state,
-        ...action.payload,
+        ...action.payload, //The token
         isAuthenticated: true,
         loading: false,
       };
     case REGISTER_FAIL:
-      localStorage.removeItem('token');
+    case AUTH_ERROR:
       return {
         ...state,
         token: null,
         isAuthenticated: false,
-        loading: true,
+        loading: false,
+        user: null,
+        // action.payload include the error message
         error: action.payload,
       };
     case CLEAR_ERRORS:
@@ -34,7 +45,7 @@ const authReducer = (state, action) => {
         error: null,
       };
     default:
-      return state;
+      throw new Error(`Unsupported type of: ${action.type}`);
   }
 };
 

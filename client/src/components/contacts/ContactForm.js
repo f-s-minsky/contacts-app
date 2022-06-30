@@ -1,32 +1,66 @@
 import React, { useState, useContext, useEffect } from 'react';
-import ContactContext from '../../context/contact/contactContext';
+// import ContactContext from '../../context/contact/contactContext';
+import {
+  addContact,
+  useContacts,
+  updateContact,
+  clearCurrent,
+} from '../../context/contact/ContactState';
+
+// New
+const initialContact = {
+  name: '',
+  email: '',
+  phone: '',
+  type: 'personal',
+};
 
 const ContactForm = () => {
-  const contactContext = useContext(ContactContext);
+  // const contactContext = useContext(ContactContext);
+  const [contactState, contactDispatch] = useContacts();
 
-  const { addContact, updateContact, clearCurrent, current } = contactContext;
+  // NEW
+  const { current } = contactState;
 
+  // NEW
+  const [contact, setContact] = useState(initialContact);
+
+  // const { addContact, updateContact, clearCurrent, current } = contactContext;
+
+  // useEffect(() => {
+  //   if (current !== null) {
+  //     setContact(current);
+  //   } else {
+  //     setContact({
+  //       name: '',
+  //       email: '',
+  //       phone: '',
+  //       type: 'personal',
+  //     });
+  //   }
+  // }, [contactContext, current]);
+
+  // NEW
   useEffect(() => {
     if (current !== null) {
       setContact(current);
     } else {
-      setContact({
-        name: '',
-        email: '',
-        phone: '',
-        type: 'personal',
-      });
+      setContact(initialContact);
     }
-  }, [contactContext, current]);
+  }, [current]);
 
-  const [contact, setContact] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    type: 'personal',
-  });
+  // const [contact, setContact] = useState({
+  //   name: '',
+  //   email: '',
+  //   phone: '',
+  //   type: 'personal',
+  // });
 
   const { name, email, phone, type } = contact;
+
+  const clearAll = () => {
+    clearCurrent();
+  };
 
   const onChange = (e) =>
     setContact({
@@ -34,29 +68,37 @@ const ContactForm = () => {
       [e.target.name]: e.target.value,
     });
 
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   if (current === null) {
+  //     addContact(contact);
+  //   } else {
+  //     updateContact(contact);
+  //   }
+
+  // NEW
   const onSubmit = (e) => {
     e.preventDefault();
-
     if (current === null) {
-      addContact(contact);
+      addContact(contactDispatch, contact).then(() =>
+        setContact(initialContact)
+      );
     } else {
-      updateContact(contact);
+      updateContact(contactDispatch, contact);
     }
-
     clearAll();
-
-    // // Set to default, clear
-    // setContact({
-    //   name: '',
-    //   email: '',
-    //   phone: '',
-    //   type: 'personal',
-    // });
   };
 
-  const clearAll = () => {
-    clearCurrent();
-  };
+  // clearAll();
+
+  // // Set to default, clear
+  // setContact({
+  //   name: '',
+  //   email: '',
+  //   phone: '',
+  //   type: 'personal',
+  // });
 
   return (
     <form onSubmit={onSubmit}>
